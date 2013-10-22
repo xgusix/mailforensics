@@ -36,6 +36,21 @@ def get_body(email_message):
 #-------------------------------------------------------------------------------
 
 #-------------------------------------------------------------------------------
+#Returns all the URLs found in an e-mail
+#-------------------------------------------------------------------------------
+def get_links(body):
+	links = []
+	regex = re.compile(r'http.+(?=$|\s)')
+	linksaux = regex.findall(body)
+	for link in linksaux:
+		print link
+		if link.find(' ') == -1 and link.find('\t') == -1:
+			links.append(link)
+	print links
+	return unique(links)
+
+
+#-------------------------------------------------------------------------------
 #Fetchs IP adresses in the headers and return on findings in a list.
 #-------------------------------------------------------------------------------
 def get_ip_addresses_implied(email_message):
@@ -45,7 +60,7 @@ def get_ip_addresses_implied(email_message):
 		if ip:
 			ip=ip.group()
 			ip_addresses.append(ip)
-	return set(ip_addresses)
+	return unique(ip_addresses)
 
 #-------------------------------------------------------------------------------
 #Gets the timestamps of the different jumps that the e-mail did before reaching
@@ -99,4 +114,12 @@ def get_attachments(email_message):
     		attachments.append(attachment)
     return attachments
 
+#-------------------------------------------------------------------------------
+#AUX FUNCTIONS
+#-------------------------------------------------------------------------------
 
+
+def unique(seq):
+    seen = set()
+    seen_add = seen.add
+    return [ x for x in seq if x not in seen and not seen_add(x)]
