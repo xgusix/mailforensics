@@ -1,1 +1,1 @@
-<img src="ojete" onerror="alert(1)">
+alert(1);
